@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Website Trắc nghiệm</title>
+    <link rel = "icon" href =
+            "https://aztest.vn/uploads/news/2019/1_6.jpg"
+          type = "image/x-icon">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .number {
+            display: inline;
+            border-radius: 15px;
+            padding: 3px 6px;
+            background-color: rgb(114, 187, 230);
+            color: white;
+            float: right;
+            margin-right: 20px;
+            font-size: 14px
+        }</style>
+</head>
+<body>
+<div class="container">
+    <div  th:fragment="thong-ke" >
+        <div class="card-header  " style="background: #b8daff;text-align: center;">
+            <label class="col-form-label" style="color: black;"><i class="far fa-thumbs-up"></i>Vinh Danh Bảng Vàng</label>
+        </div>
+        <table class="table table-hover mt-3 ml-2 mr-3 h-50 rounded "  id="tableHistory" style="width:90%;font-size: 15px"  >
+            <thead >
+            <tr class="table-primary text-primary" th:each="score: ${sList}" >
+                <td  ><span  class="fa fa-user mr-1 pr-2"  ></span> <span  th:text="${score.username}"></span><span  class="number" th:text="${score.totalCorrect}"></span></td>
+            </tr>
+
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

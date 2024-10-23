@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <title>Website Trắc nghiệm</title>
+    <link rel = "icon" href =
+            "https://aztest.vn/uploads/news/2019/1_6.jpg"
+          type = "image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="../static/css/default-page.css" rel="stylesheet" th:href="@{/css/default-page.css}">
+</head>
+<body>
+<div  th:insert="~{default-admin.html :: navbarAdmin}"></div>
+
+<div class="container">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert" th:if="${message != null}">
+        <strong th:text="${message}"></strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="h4 text-center mb-4">
+        Danh Sách Người Dùng
+    </div>
+
+    <table class="table table-bordered table-striped " id="tableList">
+        <tr style="background-color: #27c9ff;">
+            <th class="text-center">STT</th>
+            <th class="text-center">Họ tên</th>
+            <th class="text-center">Địa chỉ nhà</th>
+            <th class="text-center">Số điện thoại</th>
+            <th class="text-center">Hành động</th>
+        </tr>
+        <tr th:each="user, count : ${users}">
+            <td th:text="${count.index + 1}" class="text-center"></td>
+            <td th:text="${user.fullName}" class="text-center"></td>
+            <td th:text="${user.address}" class="text-center"></td>
+            <td th:text="${user.phoneNumber}" class="text-center"></td>
+            <td th:if="${user.id } == ${us}" class="text-center">Role ADMIN</td>
+            <td class="text-center" th:if="${user.id} != ${us}">
+                <a th:href="@{/user/editMember/{id}(id=${user.id})}"><i class="fas fa-edit text-primary"></i></a>
+                <span>&nbsp;&nbsp;</span>
+                <a th:href="@{/user/delete/{id}(id=${user.id})}" id="deleteButton"><i class="far fa-trash-alt text-danger"></i></a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="table-pagination d-flex justify-content-center">
+    <ul class="pagination">
+        <li class="page-item" th:class="${users.number eq 0} ? 'disabled' : ''">
+            <a class="page-link" th:if="${users.hasPrevious()}" th:href="@{'/user/list'(page=${users.number - 1},size=${users.size})}">Trước</a>
+        </li>
+
+        <li class="page-item" th:each="pageNo : ${#numbers.sequence(0, users.totalPages - 1)}" th:class="${users.number eq pageNo}? 'active' : ''">
+            <a class="page-link" th:if="${users.number  eq pageNo}" href="javascript:void(0);">
+                <span th:text="${pageNo + 1}"></span>
+            </a>
+            <a class="page-link" th:if="${not (users.number  eq pageNo)}" th:href="@{${'/user/list'}(page=${pageNo},size=${users.size})}">
+                <span th:text="${pageNo + 1}"></span>
+            </a>
+
+        </li>
+        <li class="page-item" th:class="${users.number + 1 ge users.totalPages} ? 'disabled' : ''">
+            <a class="page-link" th:if="${users.hasNext()}" th:href="@{'/user/list'(page=${users.number + 1},size=${users.size})}">Sau</a>
+        </li>
+    </ul>
+</div>
+
+<div  th:insert="~{default-admin.html :: footer}"></div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có muốn xoá người dùng này không ?<a></a></p>
+            </div>
+            <div class="modal-footer">
+                <a href="" type="button" class="btn btn-primary" id="delRef">Có</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".table #deleteButton").on('click', function (event) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            $('#deleteModal #delRef').attr('href', href);
+            $('#deleteModal').modal();
+        })
+    })
+
+    $("#showExam").click(function(){
+        $("#question").toggle();
+    });
+</script>
+</body>
+</html>

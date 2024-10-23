@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <title>Website Trắc nghiệm</title>
+    <link rel = "icon" href =
+            "https://aztest.vn/uploads/news/2019/1_6.jpg"
+          type = "image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="../static/css/default-page.css" rel="stylesheet" th:href="@{/css/default-page.css}">
+</head>
+<body>
+<div  th:insert="~{default-admin.html :: navbarAdmin}"></div>
+<div class="container">
+    <div class="h3 text-center">
+        Danh Sách Câu Hỏi
+    </div>
+    <div class="btn-group mb-3 d-flex justify-content-between">
+
+        <div class="">
+<!--            <a href="/question/create" class="btn btn-primary">-->
+            <a class="btn btn-primary" th:href="@{/question/create}">
+                Thêm mới
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped table-bordered table-hover table-responsive-md">
+        <thead>
+        <tr style="background-color: #27c9ff;">
+            <th>Mã câu hỏi</th>
+            <th>Câu hỏi</th>
+            <th>Đáp án</th>
+            <th class="text-center">
+                <i class="far fa-plus-square"></i>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question: ${questions}">
+            <td th:text="${question.quesId}"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.ans}"></td>
+            <td class="text-center">
+                <a th:href="@{/question/editQuest/{id}(id=${question.quesId})}"><i class="fas fa-edit text-primary"></i></a>
+                <a th:href="@{/question/delete/{id}(id=${question.quesId})}" id="deleteButton"><i class="far fa-trash-alt text-danger"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="table-pagination d-flex justify-content-center " style="margin-bottom: 150px">
+    <ul class="pagination">
+        <li class="page-item" th:class="${questions.number eq 0} ? 'disabled' : ''">
+            <a class="page-link" th:if="${questions.hasPrevious()}" th:href="@{'/question/list'(page=${questions.number - 1},size=${questions.size})}">Trước</a>
+        </li>
+
+        <li class="page-item" th:each="pageNo : ${#numbers.sequence(0, questions.totalPages - 1)}" th:class="${questions.number eq pageNo}? 'active' : ''">
+
+            <a class="page-link" th:if="${questions.number  eq pageNo}" href="javascript:void(0);">
+                <span th:text="${pageNo + 1}"></span>
+            </a>
+
+            <a class="page-link" th:if="${not (questions.number  eq pageNo)}" th:href="@{${'/question/list'}(page=${pageNo},size=${questions.size})}">
+                <span th:text="${pageNo + 1}"></span>
+            </a>
+
+        </li>
+        <li class="page-item" th:class="${questions.number + 1 ge questions.totalPages} ? 'disabled' : ''">
+            <a class="page-link" th:if="${questions.hasNext()}" th:href="@{'/question/list'(page=${questions.number + 1},size=${questions.size})}">Sau</a>
+        </li>
+    </ul>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title">Xác nhận</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có muốn xoá câu hỏi này không ?<a></a></p>
+            </div>
+            <div class="modal-footer">
+                <a href="" type="button" class="btn btn-primary" id="delRef">Có</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div  th:insert="~{default-admin.html :: footer}"></div>
+
+<script src="jquery/jquery-3.5.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $(".table #deleteButton").on('click', function (event) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            $('#deleteModal #delRef').attr('href', href);
+            $('#deleteModal').modal();
+        })
+    })
+
+    $("#showExam").click(function(){
+        $("#question").toggle();
+    });
+</script>
+
+</body>
+</html>

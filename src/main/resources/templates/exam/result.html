@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Website Trắc nghiệm</title>
+    <link rel = "icon" href =
+            "https://aztest.vn/uploads/news/2019/1_6.jpg"
+          type = "image/x-icon">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="../static/css/default-page.css" rel="stylesheet" th:href="@{/css/default-page.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" th:href="@{/style/result.css}">
+    <title>Result Page</title>
+</head>
+<body>
+
+<!-- Importing NavBar -->
+<div th:insert="~{/default-page :: navbar}"></div>
+
+<!-- Main Container Start -->
+<div class="main-container container py-5 px-4">
+    <div class="card bg-dark text-light py-5 px-4 mx-auto">
+<!--        <img th:src="@{../image/logo.jpg}" alt="image">-->
+
+        <h3 class="bg-info text-center mb-5 p-2">Điểm Của Bạn</h3>
+
+        <div class="d-flex justify-content-center">
+            <p>Tên Người Tham Gia:&nbsp;&nbsp;</p>
+            <p th:if="${result}" th:text="${result.username}"></p>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <p>Tổng Câu Trả Lời Đúng:&nbsp;&nbsp;</p>
+            <p th:if="${result}" th:text="${result.totalCorrect}"></p>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <p>Tổng Câu Trả Lời Sai:&nbsp;&nbsp;</p>
+            <p th:if="${result}" th:text="${qForm.questions.size()} - ${result.totalCorrect}"></p>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+<!--            <button type="button" th:onclick="window.location.href='/score'"-->
+<!--                    class="btn btn-outline-warning mx-auto">Xem Bảng Điểm</button>-->
+            <button type="button" th:onclick="window.location.href='/default'"
+                    class="btn btn-outline-warning mx-auto">Quay Về</button>
+        </div>
+    </div>
+</div>
+
+<!-- Importing Footer -->
+<div th:insert="~{/default-page :: footer}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
